@@ -9,7 +9,7 @@
 }
 
 .Card.Selected {
-    filter: brightness(115%);
+    filter: brightness(105%);
     border: 3px solid red;
     box-shadow: 0 0 20px red;
 }

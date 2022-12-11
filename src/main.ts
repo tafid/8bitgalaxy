@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 import "./assets/main.scss";
+import "opentip/css/opentip.css";
 import App from "./App.vue";
 import routes from "./routes";
 

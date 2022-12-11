@@ -1,5 +1,6 @@
 import Drawer from "./Drawer.js";
 import {v4 as uuidv4} from "uuid";
+import {useTooltip} from "../../../use/tooltip.js";
 
 class CardDrawer {
   constructor(drawer) {
@@ -7,14 +8,15 @@ class CardDrawer {
   }
 
   draw(parent, card, y, x) {
-    let e = this._drawer.importNode(parent, this.fragment, ".Card");
-    let m = this._drawer.m;
+    const e = this._drawer.importNode(parent, this.fragment, ".Card");
+    const m = this._drawer.m;
     e.id = uuidv4();
+    const [showTooltip, hideTooltip] = useTooltip(e, card);
     e.classList.add(card.visibility);
     e.classList.add(card.Type ?? "Ship");
     e.classList.add(card.Race ?? "Neutral");
     if (card.Alternative) {
-      e.classList.add('Alterable');
+      e.classList.add("Alterable");
     }
     e.ondragstart = (event) => {
       event.currentTarget.classList.add("dragging");
@@ -25,18 +27,22 @@ class CardDrawer {
     });
     e.ondblclick = (event) => {
       if (event.ctrlKey) {
-        if (event.currentTarget.classList.contains('Alterable')) {
-          event.currentTarget.classList.toggle('Altered');
+        if (event.currentTarget.classList.contains("Alterable")) {
+          event.currentTarget.classList.toggle("Altered");
         }
       } else {
-        event.currentTarget.classList.toggle('Visible');
-        event.currentTarget.classList.toggle('Turned');
+        event.currentTarget.classList.toggle("Visible");
+        event.currentTarget.classList.toggle("Turned");
       }
-    }
-
+    };
     e.onclick = (event) => {
-      event.currentTarget.classList.toggle('Selected');
-    }
+      event.currentTarget.classList.toggle("Selected");
+      if (event.currentTarget.classList.contains("Selected")) {
+        showTooltip();
+      } else {
+        hideTooltip();
+      }
+    };
 
     this.drawImage(e, card.Specs);
     this._drawer.draw(e, card.Specs);
